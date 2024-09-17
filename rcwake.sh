@@ -1,5 +1,5 @@
-# rcdiscover function for managing and waking up devices
-rcdiscover() {
+# rcwake function for managing and waking up devices
+rcwake() {
     # Database of devices with MAC addresses and IP addresses
     declare -A device_database=(
         ["new_lab"]="78:d0:04:31:a0:94 10.0.2.81"
@@ -90,7 +90,7 @@ rcdiscover() {
 
     # Function to display help
     show_help() {
-        echo "Usage: rcdiscover [OPTION] [TARGET]"
+        echo "Usage: rcwake [OPTION] [TARGET]"
         echo
         echo "Wake-on-LAN tool for managing and waking up devices."
         echo
@@ -107,9 +107,9 @@ rcdiscover() {
         echo "The device's IP address will then be opened in a browser."
         echo
         echo "Examples:"
-        echo "  rcdiscover 0           Check, wake up if needed, and open the first device in the list"
-        echo "  rcdiscover heiko_cube  Check, wake up if needed, and open the device named 'heiko_cube'"
-        echo "  rcdiscover -i          List devices, prompt for selection, then wake and open the selected device"
+        echo "  rcwake 0           Check, wake up if needed, and open the first device in the list"
+        echo "  rcwake heiko_cube  Check, wake up if needed, and open the device named 'heiko_cube'"
+        echo "  rcwake -i          List devices, prompt for selection, then wake and open the selected device"
     }
 
     # Main function logic
