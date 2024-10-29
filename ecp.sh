@@ -1,5 +1,5 @@
 ecp() {
-    original_command="$*"
+    original_command=$(printf '%q ' "$@")
     current_dir=$(pwd)
     user=$(whoami)
     hostname=$(hostname)
@@ -9,5 +9,3 @@ ecp() {
 $output"
     echo -e "$copy_text" | xclip -selection clipboard
 }
-
-
