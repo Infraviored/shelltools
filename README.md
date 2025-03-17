@@ -92,4 +92,29 @@ treefiles [-L level] [-P|--prune] [-I pattern]... [-S|--show] [directory]
 - Ignore patterns for excluding files and directories
 - Show mode for interactive file selection and content display
 
+### Desktop Shortcut Cleaner (clean_shortcuts.sh)
+
+`desktop-shortcut-cleaner` is a comprehensive utility for managing desktop shortcut files (.desktop files) in your system.
+
+#### Usage:
+```bash
+desktop-shortcut-cleaner COMMAND [OPTIONS]
+```
+
+#### Commands:
+- `search, s`: Search and delete desktop shortcuts by content
+- `broken, b`: Find and delete broken desktop shortcuts
+- `help, h`: Display help message
+
+#### Aliases:
+- `dsc`: Shorthand for desktop-shortcut-cleaner
+
+#### Features:
+- Search for desktop files by content or profile name
+- Find broken shortcuts by checking if the executable exists
+- Interactive interface to select which files to delete
+- Detailed information about why each shortcut is considered broken
+- Handles permission issues gracefully, suggesting sudo when needed
+- Command-specific help with examples
+
 Each tool in this collection is designed to address specific needs and improve your command-line experience. Explore the usage and features of each tool to boost your productivity and simplify your daily tasks.
