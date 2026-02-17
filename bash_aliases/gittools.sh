@@ -5,14 +5,17 @@ gittools() {
     shift
 
     case "$subcommand" in
-        init_existing)
+        init-existing)
             gittools_init_existing "$@"
             ;;
-        remote_add)
+        remote-add)
             gittools_remote_add
             ;;
-        remote_delete)
+        remote-delete)
             gittools_remote_delete
+            ;;
+        local-prune)
+            gittools_local_prune
             ;;
         *)
             echo "Unknown subcommand: $subcommand"
@@ -26,9 +29,10 @@ gittools_help() {
     echo "Usage: gittools <subcommand> [<args>]"
     echo
     echo "Subcommands:"
-    echo "  init_existing  Initialize a local directory as a Git repository"
-    echo "  remote_add     Add a new remote and attempt to push"
-    echo "  remote_delete  Delete an existing remote"
+    echo "  init-existing  Initialize a local directory as a Git repository"
+    echo "  remote-add     Add a new remote and attempt to push"
+    echo "  remote-delete  Delete an existing remote"
+    echo "  local-prune    Remove local branches that are gone on remote"
     echo
     echo "For more information on a subcommand, run:"
     echo "  gittools <subcommand> --help"
@@ -221,6 +225,40 @@ gittools_remote_delete() {
         git remote -v
     else
         echo "The specified URL was not found in the remote configuration."
+    fi
+}
+
+gittools_local_prune() {
+    if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        echo "Error: Not a git repository."
+        return 1
+    fi
+
+    echo "Fetching and pruning remote-tracking branches..."
+    git fetch --prune
+
+    # Identify local branches that are 'gone' on the remote
+    # We look for "[gone]" in git branch -vv output
+    local gone_branches=($(git branch -vv | grep ": gone]" | awk '{print $1}' | sed 's/^\*//'))
+
+    if [ ${#gone_branches[@]} -eq 0 ]; then
+        echo "No local branches found that are gone on the remote."
+        return 0
+    fi
+
+    echo "The following local branches are gone on the remote:"
+    for branch in "${gone_branches[@]}"; do
+        echo "  - $branch"
+    done
+
+    read -p "Should we remove these local branches? (y/N): " confirm
+    if [[ "$confirm" =~ ^[Yy]$ ]]; then
+        for branch in "${gone_branches[@]}"; do
+            git branch -D "$branch"
+        done
+        echo "Selected local branches removed."
+    else
+        echo "Operation cancelled."
     fi
 }
 
