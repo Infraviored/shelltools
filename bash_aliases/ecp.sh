@@ -7,5 +7,13 @@ ecp() {
     echo "$output"
     copy_text="${user}@${hostname}:${current_dir}$ $original_command
 $output"
-    echo -e "$copy_text" | xclip -selection clipboard
+    if [ -n "$WAYLAND_DISPLAY" ] && command -v wl-copy &>/dev/null; then
+        echo -e "$copy_text" | wl-copy
+    elif [ -n "$DISPLAY" ] && command -v xclip &>/dev/null; then
+        echo -e "$copy_text" | xclip -selection clipboard
+    elif [ -n "$DISPLAY" ] && command -v xsel &>/dev/null; then
+        echo -e "$copy_text" | xsel --clipboard --input
+    else
+        echo -e "$copy_text" | xclip -selection clipboard
+    fi
 }
